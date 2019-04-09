@@ -17,20 +17,22 @@ def get_labeled_exif(filename):
     """
     exif = get_exif(filename)
     labeled = {}
-    for (key, val) in exif.items():
-        if 0x8825 == key:
-            labeled_gps = {}
-            for gpsk, gpsv in val.items():
-                labeled_gps[GPSTAGS.get(gpsk)] = gpsv
-            val = labeled_gps
-        labeled[TAGS.get(key)] = val
+    if exif is not None:
+        for (key, val) in exif.items():
+            if 0x8825 == key:
+                labeled_gps = {}
+                for gpsk, gpsv in val.items():
+                    labeled_gps[GPSTAGS.get(gpsk)] = gpsv
+                val = labeled_gps
+            labeled[TAGS.get(key)] = val
 
     return labeled
 
 
 def get_datetime(labeled_exif):
-    dt = labeled_exif["DateTimeOriginal"]
-    return datetime.strptime(dt, "%Y:%m:%d %H:%M:%S")
+    dt = labeled_exif.get("DateTimeOriginal")
+    if dt is not None:
+        return datetime.strptime(dt, "%Y:%m:%d %H:%M:%S")
 
 
 if __name__ == "__main__":

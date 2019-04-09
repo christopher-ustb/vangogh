@@ -1,5 +1,6 @@
 from django.db import models
-from datetime import datetime
+
+from django.utils import timezone
 
 
 class Photo(models.Model):
@@ -10,20 +11,29 @@ class Photo(models.Model):
     image_hash = models.CharField(max_length=128, blank=True, null=True)
     gps_longitudes = models.FloatField(blank=True, null=True)
     gps_latitudes = models.FloatField(blank=True, null=True)
-    gmt_created = models.DateTimeField(default=datetime.now, blank=True)
+    gmt_created = models.DateTimeField(default=timezone.now, blank=True)
 
     class Meta:
         db_table = "photo"
 
 
+class Person(models.Model):
+    name = models.CharField(max_length=128, blank=False)
+    mean_face_encoding = models.TextField()
+
+    class Meta:
+        db_table = "person"
+
+
 class Face(models.Model):
+    photo = models.ForeignKey(Photo, related_name='faces', on_delete=False, blank=False, null=True)
+    person = models.ForeignKey(Person, on_delete=False, related_name='faces')
     name = models.CharField(max_length=64)
+    location_top = models.IntegerField()
+    location_bottom = models.IntegerField()
+    location_left = models.IntegerField()
+    location_right = models.IntegerField()
+    encoding = models.TextField()
 
-
-class FaceInPhoto(models.Model):
-    face = models.ForeignKey(Face, on_delete=False)
-    photo = models.ForeignKey(Photo, on_delete=False)
-    x = models.IntegerField()
-    y = models.IntegerField()
-    width = models.IntegerField()
-    height = models.IntegerField()
+    class Meta:
+        db_table = "face"
