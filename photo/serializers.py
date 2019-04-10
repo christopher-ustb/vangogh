@@ -5,4 +5,4 @@ from photo.models import Photo
 class PhotoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Photo
-        fields = ('path', 'thumbnail', 'file_size')
+        fields = ('path', 'thumbnail', 'file_size', 'datetime_original')

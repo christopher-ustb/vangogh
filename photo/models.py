@@ -1,6 +1,12 @@
+import os
+
 from django.db import models
 
 from django.utils import timezone
+
+from photo import photo_meta
+from vangogh import utils
+from PIL import Image
 
 
 class Photo(models.Model):
@@ -16,24 +22,37 @@ class Photo(models.Model):
     class Meta:
         db_table = "photo"
 
+    @staticmethod
+    def build_from_path(photo_path):
+        return Photo(
+            path=utils.absolute_path_to_server_url(photo_path)
+        )._generate_thumbnail()._set_file_size()._read_exif()
 
-class Person(models.Model):
-    name = models.CharField(max_length=128, blank=False)
-    mean_face_encoding = models.TextField()
+    def _generate_thumbnail(self):
+        if self.path is None:
+            pass
+        file = utils.server_url_to_absolute_path(self.path)
+        img = Image.open(file)
+        # TODO thumbnail big/middle/small
+        img.thumbnail(size=(1024, 1024))
+        self.thumbnail = "/.thumbnail%s" % self.path
+        thumbnail_path = utils.server_url_to_absolute_path(self.thumbnail)
+        os.makedirs(os.path.dirname(thumbnail_path), exist_ok=True)
+        img.save(thumbnail_path, "JPEG")
+        return self
 
-    class Meta:
-        db_table = "person"
+    def _set_file_size(self):
+        if self.path is None:
+            pass
+        file = utils.server_url_to_absolute_path(self.path)
+        stat_info = os.stat(file)
+        self.file_size = stat_info.st_size
+        return self
 
-
-class Face(models.Model):
-    photo = models.ForeignKey(Photo, related_name='faces', on_delete=False, blank=False, null=True)
-    person = models.ForeignKey(Person, on_delete=False, related_name='faces')
-    name = models.CharField(max_length=64)
-    location_top = models.IntegerField()
-    location_bottom = models.IntegerField()
-    location_left = models.IntegerField()
-    location_right = models.IntegerField()
-    encoding = models.TextField()
-
-    class Meta:
-        db_table = "face"
+    def _read_exif(self):
+        if self.path is None:
+            pass
+        file = utils.server_url_to_absolute_path(self.path)
+        lb_exif = photo_meta.get_labeled_exif(file)
+        self.datetime_original = photo_meta.get_datetime(lb_exif)
+        return self
