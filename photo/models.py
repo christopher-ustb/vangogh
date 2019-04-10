@@ -1,12 +1,11 @@
 import os
 
+from PIL import Image
 from django.db import models
-
 from django.utils import timezone
 
 from photo import photo_meta
 from vangogh import utils
-from PIL import Image
 
 
 class Photo(models.Model):
@@ -24,9 +23,11 @@ class Photo(models.Model):
 
     @staticmethod
     def build_from_path(photo_path):
-        return Photo(
+        photo = Photo(
             path=utils.absolute_path_to_server_url(photo_path)
         )._generate_thumbnail()._set_file_size()._read_exif()
+        photo.save()
+        return photo
 
     def _generate_thumbnail(self):
         if self.path is None:
@@ -38,7 +39,7 @@ class Photo(models.Model):
         self.thumbnail = "/.thumbnail%s" % self.path
         thumbnail_path = utils.server_url_to_absolute_path(self.thumbnail)
         os.makedirs(os.path.dirname(thumbnail_path), exist_ok=True)
-        img.save(thumbnail_path, "JPEG")
+        img.save(thumbnail_path)
         return self
 
     def _set_file_size(self):
@@ -50,8 +51,8 @@ class Photo(models.Model):
         return self
 
     def _read_exif(self):
-        if self.path is None:
-            pass
+        if self.path is None or self.path.endswith("png"):
+            return self
         file = utils.server_url_to_absolute_path(self.path)
         lb_exif = photo_meta.get_labeled_exif(file)
         self.datetime_original = photo_meta.get_datetime(lb_exif)

@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework',
     'vangogh',
-    'photo'
+    'photo',
+    'person',
 ]
 
 MIDDLEWARE = [
@@ -129,6 +130,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-PHOTO_BASIC_DIR = 'D:\\xiaofu\\pictures\\Douban'
+PHOTO_BASIC_DIR = 'D:\\xiaofu\\pictures\\知乎'
 
 PHOTO_SCAN_INTERVAL = 600

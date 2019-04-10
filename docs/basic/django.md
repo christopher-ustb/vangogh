@@ -1,5 +1,11 @@
 django model migrate
 
+```shell
+python manage.py makemigrations person
+
+python manage.py migrate
+```
+
 python logging
 
 https://docs.python.org/3/library/logging.html
