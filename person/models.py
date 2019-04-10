@@ -77,6 +77,7 @@ class Face(models.Model):
                     # TODO update mean_face_encoding
                 face.save()
                 face._generate_face_image()
+                face.save()
                 faces.append(face)
 
     def _generate_face_image(self):

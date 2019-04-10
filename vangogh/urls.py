@@ -20,9 +20,12 @@ from django.views.generic import TemplateView
 from rest_framework import routers
 
 from photo import views as photo_view
+from person import views as person_view
 
 routers = routers.DefaultRouter()
 routers.register(r'api/photos', photo_view.PhotoViewSet)
+routers.register(r'api/people', person_view.PersonViewSet)
+routers.register(r'api/faces', person_view.FaceViewSet)
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="index.html")),
