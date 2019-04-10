@@ -1,6 +1,7 @@
 import os
 
 import face_recognition
+import numpy as np
 from PIL import Image
 from django.db import models
 from django.utils import timezone
@@ -22,13 +23,29 @@ class Person(models.Model):
     def select_by_encoding(face_encoding):
         same_people = []
         all_people = Person.objects.all()
-        face_encoding_str_list = [p.mean_face_encoding for p in all_people]
-        face_encoding_num_list = [[float(ecd) for ecd in ecd_str.split(",")] for ecd_str in face_encoding_str_list]
+        face_encoding_num_list = [p.get_mean_face_encoding_array() for p in all_people]
         compare_result = face_recognition.compare_faces(face_encoding_num_list, face_encoding)
         for idx, r in enumerate(compare_result):
             if r:
                 same_people.append(all_people[idx])
         return same_people
+
+    def get_mean_face_encoding_array(self):
+        return [float(ecd) for ecd in self.mean_face_encoding.split(",")]
+
+    def update_mean_when_found_new_face(self, face_encoding):
+        """
+        当发现人物的新的面孔时，更新平均encoding向量
+        :param face_encoding: 新面孔encoding
+        :return: self
+        """
+        count_faces_of_same_person = Face.objects.filter(person=self).count()
+        encoding_arr = self.get_mean_face_encoding_array()
+        new_encoding_arr = (
+                                   np.array(encoding_arr) * count_faces_of_same_person + np.array(face_encoding)
+                           ) / (count_faces_of_same_person + 1)
+        self.mean_face_encoding = ",".join(map(str, new_encoding_arr))
+        return self
 
 
 class Face(models.Model):
@@ -49,6 +66,11 @@ class Face(models.Model):
 
     @staticmethod
     def build_faces_from_photo(photo):
+        """
+        从照片中发现face，并构造出face列表
+        :param photo: photo model instance
+        :return: face列表
+        """
         faces = []
         photo_path = utils.server_url_to_absolute_path(photo.path)
         fc_image_file = face_recognition.load_image_file(photo_path)
@@ -74,8 +96,10 @@ class Face(models.Model):
                     face.person = person
                 else:
                     face.person = same_people[0]
-                    # TODO update mean_face_encoding
+                    face.person.update_mean_when_found_new_face(face_encoding)
+
                 face.save()
+                # TODO 根据person保存文件名，减少这次save()
                 face._generate_face_image()
                 face.save()
                 faces.append(face)

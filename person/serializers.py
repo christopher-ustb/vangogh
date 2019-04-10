@@ -6,10 +6,10 @@ from person.models import Person, Face
 class PersonSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Person
-        fields = ('name', 'gmt_created')
+        exclude = ('mean_face_encoding',)
 
 
 class FaceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Face
-        fields = ('image_path', 'gmt_created')
+        exclude = ('encoding',)

@@ -4,3 +4,4 @@ django-filter
 djangorestframework==3.9.2
 Pillow==5.4.1
 pytz==2018.9
+numpy
