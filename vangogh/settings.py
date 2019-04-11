@@ -116,10 +116,14 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+PHOTO_BASIC_DIR = 'D:\\xiaofu\\pictures\\知乎'
+
 STATIC_URL = '/static/'
 
+# django  serve前端、图片资源，如果性能不足，生产环境可以使用nginx服务
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "frontend/dist/static"),
+    PHOTO_BASIC_DIR
 ]
 
 # Pagination allows you to control how many objects per page are returned.
@@ -129,7 +133,5 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'PAGE_SIZE': 10
 }
-
-PHOTO_BASIC_DIR = 'D:\\xiaofu\\pictures\\知乎'
 
 PHOTO_SCAN_INTERVAL = 600
