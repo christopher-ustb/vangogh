@@ -14,6 +14,7 @@ from vangogh.utils import logger
 class Person(models.Model):
     name = models.CharField(max_length=128, blank=False)
     mean_face_encoding = models.TextField()
+    face_count = models.IntegerField(default=1)
     gmt_created = models.DateTimeField(default=timezone.now, blank=True)
 
     class Meta:
@@ -33,18 +34,19 @@ class Person(models.Model):
     def get_mean_face_encoding_array(self):
         return [float(ecd) for ecd in self.mean_face_encoding.split(",")]
 
-    def update_mean_when_found_new_face(self, face_encoding):
+    def update_when_found_new_face(self, face_encoding):
         """
         当发现人物的新的面孔时，更新平均encoding向量
         :param face_encoding: 新面孔encoding
         :return: self
         """
-        count_faces_of_same_person = Face.objects.filter(person=self).count()
         encoding_arr = self.get_mean_face_encoding_array()
         new_encoding_arr = (
-                                   np.array(encoding_arr) * count_faces_of_same_person + np.array(face_encoding)
-                           ) / (count_faces_of_same_person + 1)
+                                   np.array(encoding_arr) * self.face_count + np.array(face_encoding)
+                           ) / (self.face_count + 1)
         self.mean_face_encoding = ",".join(map(str, new_encoding_arr))
+        self.face_count = self.face_count + 1
+        self.save()
         return self
 
 
@@ -96,10 +98,8 @@ class Face(models.Model):
                     face.person = person
                 else:
                     face.person = same_people[0]
-                    face.person.update_mean_when_found_new_face(face_encoding)
+                    face.person.update_when_found_new_face(face_encoding)
 
-                face.save()
-                # TODO 根据person保存文件名，减少这次save()
                 face._generate_face_image()
                 face.save()
                 faces.append(face)
@@ -111,7 +111,7 @@ class Face(models.Model):
         # left, upper, right, lower
         face_crop_box = (self.location_left, self.location_top, self.location_right, self.location_bottom)
         img = img.crop(face_crop_box)
-        self.image_path = "/.face/%s%s" % (self.id, img_ext)
+        self.image_path = "/.face/%s.person%s%s" % (self.photo.path, self.person.id, img_ext)
         face_image_file_path = utils.server_url_to_absolute_path(self.image_path)
         os.makedirs(os.path.dirname(face_image_file_path), exist_ok=True)
         img.save(face_image_file_path)

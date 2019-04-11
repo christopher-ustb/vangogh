@@ -5,7 +5,7 @@ from person.serializers import PersonSerializer, FaceSerializer
 
 
 class PersonViewSet(viewsets.ModelViewSet):
-    queryset = Person.objects.all().order_by("-gmt_created")
+    queryset = Person.objects.all().order_by("-face_count")
     serializer_class = PersonSerializer
 
 
