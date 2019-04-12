@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 
 from photo import photo_meta
+from baidumap import webservices as baidumap_webservices
 from vangogh import utils
 
 
@@ -16,6 +17,13 @@ class Photo(models.Model):
     image_hash = models.CharField(max_length=128, blank=True, null=True)
     gps_longitudes = models.FloatField(blank=True, null=True)
     gps_latitudes = models.FloatField(blank=True, null=True)
+    addr_country = models.CharField(max_length=64, blank=True, null=True)
+    addr_province = models.CharField(max_length=64, blank=True, null=True)
+    addr_city = models.CharField(max_length=64, blank=True, null=True)
+    addr_district = models.CharField(max_length=64, blank=True, null=True)
+    addr_town = models.CharField(max_length=64, blank=True, null=True)
+    addr_street = models.CharField(max_length=64, blank=True, null=True)
+    addr_text = models.CharField(max_length=256, blank=True, null=True)
     gmt_created = models.DateTimeField(default=timezone.now, blank=True)
 
     class Meta:
@@ -51,9 +59,26 @@ class Photo(models.Model):
         return self
 
     def _read_exif(self):
+        """
+        从照片exif中读取时间、gps，并通过百度地图api解析为地址
+        :return: self
+        """
         if self.path is None or self.path.endswith("png"):
             return self
         file = utils.server_url_to_absolute_path(self.path)
         lb_exif = photo_meta.get_labeled_exif(file)
         self.datetime_original = photo_meta.get_datetime(lb_exif)
+        degrees = photo_meta.get_gps_in_float_degree(lb_exif)
+        if degrees is not None:
+            self.gps_longitudes, self.gps_latitudes = degrees
+            addr = baidumap_webservices.geo_coding(degrees[::-1])
+            if addr is not None:
+                addr_component = addr.get("addressComponent")
+                self.addr_country = addr_component.get("country")
+                self.addr_province = addr_component.get("province")
+                self.addr_city = addr_component.get("city")
+                self.addr_district = addr_component.get("district")
+                self.addr_town = addr_component.get("town")
+                self.addr_street = addr_component.get("street")
+                self.addr_text = addr.get("formatted_address")
         return self

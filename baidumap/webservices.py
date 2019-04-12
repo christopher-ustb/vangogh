@@ -22,7 +22,8 @@ def geo_coding(locations):
     uri_with_query_str = uri + "?location=%s&output=json&latest_admin=1&ak=%s" % (
         ",".join(map(str, locations)), settings.BAIDU_MAP_AK)
     url = _BAIDU_MAP_DOMAIN + uri_with_query_str + ("&sn=%s" % _generate_sn(uri_with_query_str))
-    response = requests.get(url)
-    if response.status_code == 200:
-        # TODO 解析地址结果
-        return response.content
+    resp = requests.get(url)
+    if resp.status_code == 200:
+        resp_json = resp.json()
+        if resp_json.get("status") == 0:
+            return resp_json.get("result")

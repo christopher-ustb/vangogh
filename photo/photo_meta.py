@@ -35,6 +35,26 @@ def get_datetime(labeled_exif):
         return datetime.strptime(dt, "%Y:%m:%d %H:%M:%S")
 
 
+def _convert_degree_minute_second_to_float(degree_minute_second):
+    """
+    将度分秒的二维数组位置，转换为小数的度数
+    :param degree_minute_second: ((31, 1), (11, 1), (347208, 10000))
+    :return: 31.194890
+    """
+    d = degree_minute_second[0][0] / degree_minute_second[0][1]
+    m = degree_minute_second[1][0] / degree_minute_second[1][1]
+    s = degree_minute_second[2][0] / degree_minute_second[2][1]
+    return d + (m / 60) + (s / 3600)
+
+
+def get_gps_in_float_degree(labeled_exif):
+    gps = labeled_exif.get("GPSInfo")
+    if gps is not None:
+        latitude_degree = _convert_degree_minute_second_to_float(gps.get("GPSLatitude"))
+        longitude_degree = _convert_degree_minute_second_to_float(gps.get("GPSLongitude"))
+        return longitude_degree, latitude_degree
+
+
 if __name__ == "__main__":
     l_exif = get_labeled_exif("D:\\xiaofu\\pictures\\相机照片\\IMG_20181026_112720.jpg")
     for k, v in l_exif.items():

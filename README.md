@@ -15,3 +15,11 @@ just like google photos, build a private photo gallery on web.
 环境变量：
 
 * BAIDU_MAP_SK 百度地图SK
+
+建表：
+
+```shell
+python manage.py makemigrations person
+
+python manage.py migrate
+```
