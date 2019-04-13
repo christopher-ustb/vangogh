@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_filters',
     'rest_framework',
+    'corsheaders',
     'vangogh',
     'photo',
     'person',
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -53,6 +55,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'vangogh.urls'
+
+CORS_ORIGIN_REGEX_WHITELIST = (r'^(http?://)?localhost', )
 
 TEMPLATES = [
     {
@@ -137,4 +141,5 @@ REST_FRAMEWORK = {
 PHOTO_SCAN_INTERVAL = 600
 
 BAIDU_MAP_AK = "WNkguP1ELumSEyecEEjPvZovgebfg2s9"
-BAIDU_MAP_SK = os.environ.get("BAIDU_MAP_SK")
+BAIDU_MAP_SK = os.environ.get("BAIDU_MAP_SK") or "ZomBBcfv73u0oU6nBRDieNZ3ah0alBP2"
+

@@ -6,3 +6,4 @@ Pillow==5.4.1
 pytz==2018.9
 numpy
 requests
+django-cors-headers
