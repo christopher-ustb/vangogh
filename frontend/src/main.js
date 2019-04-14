@@ -8,6 +8,8 @@ import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 
 Vue.config.productionTip = false
+Vue.prototype.$API_URL_PREFIX = process.env.API_URL_PREFIX
+Vue.prototype.$STATIC_URL_PREFIX = process.env.STATIC_URL_PREFIX
 Vue.use(VueResource)
 Vue.use(VueMaterial)
 

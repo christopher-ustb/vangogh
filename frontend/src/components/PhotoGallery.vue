@@ -23,9 +23,9 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://localhost:8000/api/photos/').then(function (resp) {
+    this.$http.get(this.$API_URL_PREFIX + '/api/photos/').then(function (resp) {
       console.log(resp)
-      this.photos = resp.body.results.map(p => { return 'http://localhost:8000/static' + p.thumbnail })
+      this.photos = resp.body.results.map(p => { return this.$STATIC_URL_PREFIX + p.thumbnail })
     })
   },
   components: {
