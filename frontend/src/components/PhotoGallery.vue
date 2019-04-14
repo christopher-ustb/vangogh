@@ -1,15 +1,27 @@
 <template>
-  <div>
-    <!-- <img v-for="photo in photos" :key="photo.id" v-bind:src="'http://localhost:8000/static' + photo.thumbnail" style="width: 500px"> -->
-    <gallery :images="photos" :index="index" @close="index = null"></gallery>
-    <div
-      class="image"
-      v-for="(image, imageIndex) in photos"
-      :key="imageIndex"
-      @click="index = imageIndex"
-      :style="{ backgroundImage: 'url(' + image + ')', width: '300px', height: '200px' }"
-    ></div>
-  </div>
+  <md-app>
+    <md-app-toolbar md-mode="fixed" class="md-primary">
+        <h1 class="md-title">Vangogh</h1>
+        <md-input placeholder="search"></md-input>
+        <md-button>上传</md-button>
+    </md-app-toolbar>
+    <md-app-drawer md-persistent="mini">
+      <div>照片</div>
+      <div>人物</div>
+      <div>地点</div>
+      <div>专辑</div>
+    </md-app-drawer>
+    <md-app-content>
+      <gallery :images="photos" :index="index" @close="index = null"></gallery>
+      <div
+        class="image"
+        v-for="(image, imageIndex) in photos"
+        :key="imageIndex"
+        @click="index = imageIndex"
+        :style="{ backgroundImage: 'url(' + image + ')', width: '300px', height: '200px' }"
+      ></div>
+    </md-app-content>
+  </md-app>
 </template>
 
 <script>
@@ -24,7 +36,6 @@ export default {
   },
   created () {
     this.$http.get(this.$API_URL_PREFIX + '/api/photos/').then(function (resp) {
-      console.log(resp)
       this.photos = resp.body.results.map(p => { return this.$STATIC_URL_PREFIX + p.thumbnail })
     })
   },

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import PhotoGallery from '@/components/PhotoGallery'
+import PeopleList from '@/components/PeopleList'
 
 Vue.use(Router)
 
@@ -10,6 +11,11 @@ export default new Router({
       path: '/',
       name: 'PhotoGallery',
       component: PhotoGallery
+    },
+    {
+      path: '/people',
+      name: 'PeopleList',
+      component: PeopleList
     }
   ]
 })
