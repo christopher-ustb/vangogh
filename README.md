@@ -19,7 +19,7 @@ just like google photos, build a private photo gallery on web.
 建表：
 
 ```shell
-python manage.py makemigrations person
+python manage.py makemigrations photo person album
 
 python manage.py migrate
 ```

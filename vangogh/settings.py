@@ -121,7 +121,7 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-PHOTO_BASIC_DIR = 'D:\\xiaofu\\pictures\\知乎'
+PHOTO_BASIC_DIR = 'D:\\xiaofu\\vangogh_pictures'
 
 STATIC_URL = '/static/'
 
@@ -142,5 +142,5 @@ REST_FRAMEWORK = {
 PHOTO_SCAN_INTERVAL = 600
 
 BAIDU_MAP_AK = "WNkguP1ELumSEyecEEjPvZovgebfg2s9"
-BAIDU_MAP_SK = os.environ.get("BAIDU_MAP_SK") or "ZomBBcfv73u0oU6nBRDieNZ3ah0alBP2"
+BAIDU_MAP_SK = os.environ.get("BAIDU_MAP_SK")
 

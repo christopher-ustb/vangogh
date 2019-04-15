@@ -35,6 +35,7 @@ class Photo(models.Model):
             path=utils.absolute_path_to_server_url(photo_path)
         )._generate_thumbnail()._set_file_size()._read_exif()
         photo.save()
+        photo._add_to_place_album()
         return photo
 
     def _generate_thumbnail(self):
@@ -104,5 +105,5 @@ class Photo(models.Model):
                 album.save()
             else:
                 album = place_albums[0]
-            album.photos.append(self)
+            album.photos.add(self)
             album.save()
