@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'vangogh',
     'photo',
     'person',
+    'album'
 ]
 
 MIDDLEWARE = [

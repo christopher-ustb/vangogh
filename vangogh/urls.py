@@ -19,13 +19,15 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from rest_framework import routers
 
-from photo import views as photo_view
-from person import views as person_view
+from album import views as album_views
+from person import views as person_views
+from photo import views as photo_views
 
 routers = routers.DefaultRouter()
-routers.register(r'api/photos', photo_view.PhotoViewSet)
-routers.register(r'api/people', person_view.PersonViewSet)
-routers.register(r'api/faces', person_view.FaceViewSet)
+routers.register(r'api/photos', photo_views.PhotoViewSet)
+routers.register(r'api/people', person_views.PersonViewSet)
+routers.register(r'api/faces', person_views.FaceViewSet)
+routers.register(r'api/albums', album_views.AlbumViewSet)
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="index.html")),

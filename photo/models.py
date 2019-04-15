@@ -82,3 +82,27 @@ class Photo(models.Model):
                 self.addr_street = addr_component.get("street")
                 self.addr_text = addr.get("formatted_address")
         return self
+
+    def _add_to_place_album(self):
+        """
+        将照片自动放入对应的地点相册，国内按市分组，国外按国家分组
+        """
+        if self.addr_text is not None:
+            if self.addr_country == "中国":
+                album_addr_key = self.addr_city
+                addr_level = 3
+            else:
+                album_addr_key = self.addr_country
+                addr_level = 1
+
+            from album.models import Album
+
+            place_albums = Album.objects.filter(type="A", addr_name=album_addr_key)
+            if len(place_albums) == 0:
+                album = Album(title=album_addr_key, auto=True, type="A", addr_name=album_addr_key,
+                              addr_level=addr_level)
+                album.save()
+            else:
+                album = place_albums[0]
+            album.photos.append(self)
+            album.save()
