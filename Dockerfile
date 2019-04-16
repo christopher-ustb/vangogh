@@ -1,11 +1,10 @@
 FROM python:3.7-slim
 
-# RUN  sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
-ADD  sources.list /etc/apt/
+RUN  sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+#COPY  sources.list /etc/apt/
 RUN  apt-get clean
 
-RUN apt-get -y update
-RUN apt-get install -y --fix-missing \
+RUN apt-get -y update && apt-get install -y --fix-missing \
     build-essential \
     cmake \
     gfortran \
