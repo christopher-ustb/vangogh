@@ -10,7 +10,8 @@ def _get_logger():
         '%(asctime)s : %(threadName)s : %(filename)s : %(funcName)s : %(lineno)s : %(levelname)s : %(message)s')
     file_max_byte = 256 * 1024 * 200  # 100MB
     console_handler = logging.StreamHandler()
-    file_handler = logging.handlers.RotatingFileHandler('./logs/vangogh.log', maxBytes=file_max_byte, backupCount=10)
+    os.makedirs(os.path.dirname(settings.LOGGER_FILE), exist_ok=True)
+    file_handler = logging.handlers.RotatingFileHandler(settings.LOGGER_FILE, maxBytes=file_max_byte, backupCount=10)
     console_handler.setFormatter(formatter)
     file_handler.setFormatter(formatter)
     vangogh_logger.addHandler(console_handler)

@@ -13,6 +13,8 @@ class Photo(models.Model):
     path = models.CharField(max_length=256)
     thumbnail = models.CharField(max_length=256, blank=True, null=True)
     file_size = models.IntegerField(blank=True, null=True)
+    width = models.IntegerField(default=0)
+    height = models.IntegerField(default=0)
     datetime_original = models.DateTimeField(blank=True, null=True)
     image_hash = models.CharField(max_length=128, blank=True, null=True)
     gps_longitudes = models.FloatField(blank=True, null=True)
@@ -43,6 +45,7 @@ class Photo(models.Model):
             pass
         file = utils.server_url_to_absolute_path(self.path)
         img = Image.open(file)
+        self.width, self.height = img.size
         # TODO thumbnail big/middle/small
         img.thumbnail(size=(1024, 1024))
         self.thumbnail = "/.thumbnail%s" % self.path

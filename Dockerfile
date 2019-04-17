@@ -34,21 +34,13 @@ RUN cd ~ && \
     cd  dlib/ && \
     python3 setup.py install --yes USE_AVX_INSTRUCTIONS
 
+RUN mkdir /root/vangogh
+COPY requirements.txt /root/vangogh
+WORKDIR /root/vangogh
+RUN pip3 install -r requirements.txt
 
-# The rest of this file just runs an example script.
+COPY . /root/vangogh
 
-# If you wanted to use this Dockerfile to run your own app instead, maybe you would do this:
-# COPY . /root/your_app_or_whatever
-# RUN cd /root/your_app_or_whatever && \
-#     pip3 install -r requirements.txt
-# RUN whatever_command_you_run_to_start_your_app
+EXPOSE 8000
 
-# COPY . /root/face_recognition
-# RUN cd /root/face_recognition && \
-#     pip3 install -r requirements.txt && \
-#     python3 setup.py install
-
-# CMD cd /root/face_recognition/examples && \
-#     python3 recognize_faces_in_pictures.py
-
-CMD ["tail", "-f", "/dev/null"]
+CMD ["python", "manage.py", "runserver"]
