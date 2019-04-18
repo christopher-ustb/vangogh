@@ -11,7 +11,8 @@ from vangogh import utils
 
 class Photo(models.Model):
     path = models.CharField(max_length=256)
-    thumbnail = models.CharField(max_length=256, blank=True, null=True)
+    thumbnail32 = models.CharField(max_length=256, blank=True, null=True)
+    thumbnail1024 = models.CharField(max_length=256, blank=True, null=True)
     file_size = models.IntegerField(blank=True, null=True)
     width = models.IntegerField(default=0)
     height = models.IntegerField(default=0)
@@ -43,15 +44,24 @@ class Photo(models.Model):
     def _generate_thumbnail(self):
         if self.path is None:
             pass
+
         file = utils.server_url_to_absolute_path(self.path)
         img = Image.open(file)
+
         self.width, self.height = img.size
-        # TODO thumbnail big/middle/small
+
         img.thumbnail(size=(1024, 1024))
-        self.thumbnail = "/.thumbnail%s" % self.path
-        thumbnail_path = utils.server_url_to_absolute_path(self.thumbnail)
-        os.makedirs(os.path.dirname(thumbnail_path), exist_ok=True)
-        img.save(thumbnail_path)
+        self.thumbnail1024 = "/.thumbnail1024%s" % self.path
+        thumbnail1024_path = utils.server_url_to_absolute_path(self.thumbnail1024)
+        os.makedirs(os.path.dirname(thumbnail1024_path), exist_ok=True)
+        img.save(thumbnail1024_path)
+
+        img.thumbnail(size=(32, 32))
+        self.thumbnail32 = "/.thumbnail32%s" % self.path
+        thumbnail32_path = utils.server_url_to_absolute_path(self.thumbnail32)
+        os.makedirs(os.path.dirname(thumbnail32_path), exist_ok=True)
+        img.save(thumbnail32_path)
+
         return self
 
     def _set_file_size(self):

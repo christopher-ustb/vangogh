@@ -50,6 +50,8 @@ def _convert_degree_minute_second_to_float(degree_minute_second):
 def get_gps_in_float_degree(labeled_exif):
     gps = labeled_exif.get("GPSInfo")
     if gps is not None and "GPSLatitude" in gps and "GPSLongitude" in gps:
-        latitude_degree = _convert_degree_minute_second_to_float(gps.get("GPSLatitude"))
-        longitude_degree = _convert_degree_minute_second_to_float(gps.get("GPSLongitude"))
+        latitude_degree = _convert_degree_minute_second_to_float(
+            gps.get("GPSLatitude"))
+        longitude_degree = _convert_degree_minute_second_to_float(
+            gps.get("GPSLongitude"))
         return longitude_degree, latitude_degree
