@@ -28,9 +28,10 @@ routers.register(r'api/photos', photo_views.PhotoViewSet)
 routers.register(r'api/people', person_views.PersonViewSet)
 routers.register(r'api/faces', person_views.FaceViewSet)
 routers.register(r'api/albums', album_views.AlbumViewSet)
+routers.register(r'api/albums/(?P<album_id>\d+)/photos', photo_views.AlbumPhotoViewSet, basename='photo')
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name="index.html")),
+    # url(r'^$', TemplateView.as_view(template_name="index.html")),
     path('', include(routers.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
