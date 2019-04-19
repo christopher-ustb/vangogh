@@ -1,5 +1,6 @@
 <template>
-  <md-app>
+  <div>
+  <!-- <md-app>
     <md-app-toolbar md-mode="fixed" class="md-primary">
         <h1 class="md-title">Vangogh</h1>
         <md-input placeholder="search"></md-input>
@@ -11,21 +12,15 @@
       <div>地点</div>
       <div>专辑</div>
     </md-app-drawer>
-    <md-app-content>
-      <gallery :images="photos" :index="index" @close="index = null"></gallery>
-      <div
-        class="image"
-        v-for="(image, imageIndex) in photos"
-        :key="imageIndex"
-        @click="index = imageIndex"
-        :style="{ backgroundImage: 'url(' + image + ')', width: '300px', height: '200px' }"
-      ></div>
-    </md-app-content>
-  </md-app>
+    <md-app-content> -->
+      <equal-height-images-row v-if="photos.length" :images="photos"></equal-height-images-row>
+    <!-- </md-app-content>
+  </md-app> -->
+  </div>
 </template>
 
 <script>
-import VueGallery from 'vue-gallery'
+import EqualHeightImagesRow from '@/components/EqualHeightImagesRow'
 export default {
   name: 'PhotoGallery',
   data () {
@@ -36,11 +31,11 @@ export default {
   },
   created () {
     this.$http.get(this.$API_URL_PREFIX + '/api/photos/').then(function (resp) {
-      this.photos = resp.body.results.map(p => { return this.$STATIC_URL_PREFIX + p.thumbnail })
+      this.photos = resp.body.results
     })
   },
   components: {
-    'gallery': VueGallery
+    'equal-height-images-row': EqualHeightImagesRow
   }
 }
 </script>
