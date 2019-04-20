@@ -1,13 +1,16 @@
 <template>
   <div>
-    <progressive-image
-      v-for="rimg in rowImages"
-      :key="rimg.id"
-      :style="{left: 0}"
-      :tiny-thumbnail="$STATIC_URL_PREFIX + rimg.thumbnail32"
-      :large-thumbnail="$STATIC_URL_PREFIX + rimg.thumbnail1024"
-      figure-width="200" figure-height="150">
-    </progressive-image>
+    <div v-for="(row, index) in rowImages" :key="index" :style="{height: row.height + 'px'}" class="row-box">
+      <progressive-image
+        v-for="rimg in row.imgs"
+        :key="rimg.id"
+        :style="{left: rimg.displayPositionLeft + 'px'}"
+        :tiny-thumbnail="$STATIC_URL_PREFIX + rimg.thumbnail32"
+        :large-thumbnail="$STATIC_URL_PREFIX + rimg.thumbnail1024"
+        :figure-width="rimg.displayWidth"
+        :figure-height="rimg.displayHeight">
+      </progressive-image>
+    </div>
   </div>
 </template>
 
@@ -17,28 +20,57 @@ export default {
   name: 'EqualHeightImagesRow',
   data () {
     return {
-      rowImages: []
+      rowImages: [{
+        h: 0,
+        imgs: []
+      }]
     }
   },
-  props: [
-    'images'
-  ],
+  props: {
+    'images': Array,
+    'rowWidth': Number
+  },
   created () {
-    const rowWidth = 1000
-    const maxHeight = 200
-    let height = 999999
-    while (height > maxHeight) {
-      const img = this.images.pop()
-      this.rowImages.push(img)
+    const imagesToArrange = [...this.images]
+    const paddingX = 4
+    const rowWidth = this.rowWidth
+    const maxRatio = 5
+    const maxHeight = rowWidth / maxRatio
+    while (imagesToArrange.length > 0) {
+      const img = imagesToArrange.pop()
+      const row = this.rowImages[this.rowImages.length - 1]
+      row.imgs.push(img)
       let widthHeightRatio = 0
-      this.rowImages.forEach((rowImg) => {
+      row.imgs.forEach((rowImg) => {
         widthHeightRatio += rowImg.width / rowImg.height
       })
-      height = rowWidth / widthHeightRatio
+      row.height = rowWidth / widthHeightRatio
+      if (row.height < maxHeight) {
+        this.rowImages.push({
+          h: 0,
+          imgs: []
+        })
+      }
     }
+    this.rowImages.forEach((row) => {
+      let marginLeft = 0
+      row.imgs.forEach((img) => {
+        img.displayPositionLeft = marginLeft
+        img.displayHeight = Math.min(row.height, maxHeight)
+        img.displayWidth = (img.displayHeight * img.width / img.height) - paddingX
+        marginLeft += (img.displayWidth + paddingX)
+      })
+    })
   },
   components: {
     'progressive-image': ProgressiveImage
   }
 }
 </script>
+
+<style>
+.row-box {
+  position: relative;
+  margin-bottom: 4px;
+}
+</style>

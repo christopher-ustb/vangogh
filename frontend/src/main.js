@@ -5,6 +5,7 @@ import App from './App'
 import VueResource from 'vue-resource'
 import router from './router'
 import VueMaterial from 'vue-material'
+import 'normalize.css'
 import 'vue-material/dist/vue-material.min.css'
 
 Vue.config.productionTip = false

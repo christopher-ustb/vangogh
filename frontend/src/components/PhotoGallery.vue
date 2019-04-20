@@ -13,7 +13,8 @@
       <div>专辑</div>
     </md-app-drawer>
     <md-app-content> -->
-      <equal-height-images-row v-if="photos.length" :images="photos"></equal-height-images-row>
+      <equal-height-images-row v-if="photos.length" :images="photos" :row-width="1200">
+      </equal-height-images-row>
     <!-- </md-app-content>
   </md-app> -->
   </div>

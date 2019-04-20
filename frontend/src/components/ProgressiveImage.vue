@@ -1,5 +1,8 @@
 <template>
-  <figure :style="{width: figureWidth + 'px', height: figureHeight + 'px'}" class="pgsv-image">
+  <figure :style="{width: figureWidth + 'px', height: figureHeight + 'px'}"
+    v-on:scroll="checkViewportToLoad"
+    @click="checkViewportToLoad"
+    class="pgsv-image">
     <img :src="tinyThumbnail">
     <img v-if="loaded" :src="largeThumbnail">
   </figure>
@@ -23,12 +26,23 @@ export default {
       setTimeout(() => {
         this.loaded = true
       }, 1000)
+    },
+    checkViewportToLoad () {
+      let rect = this.$el.getBoundingClientRect()
+      console.log(rect)
     }
   }
 }
 </script>
 
 <style>
+figure {
+    display: block;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+}
 .pgsv-image {
   position: absolute;
   left: 0;
