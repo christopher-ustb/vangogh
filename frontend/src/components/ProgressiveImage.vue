@@ -1,6 +1,6 @@
 <template>
   <figure :style="{width: figureWidth + 'px', height: figureHeight + 'px'}"
-    v-on:scroll="checkViewportToLoad"
+    v-on:scroll.native="checkViewportToLoad"
     @click="checkViewportToLoad"
     class="pgsv-image">
     <img :src="tinyThumbnail">

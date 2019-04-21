@@ -31,36 +31,55 @@ export default {
     'rowWidth': Number
   },
   created () {
-    const imagesToArrange = [...this.images]
-    const paddingX = 4
-    const rowWidth = this.rowWidth
-    const maxRatio = 5
-    const maxHeight = rowWidth / maxRatio
-    while (imagesToArrange.length > 0) {
-      const img = imagesToArrange.pop()
-      const row = this.rowImages[this.rowImages.length - 1]
-      row.imgs.push(img)
-      let widthHeightRatio = 0
-      row.imgs.forEach((rowImg) => {
-        widthHeightRatio += rowImg.width / rowImg.height
-      })
-      row.height = rowWidth / widthHeightRatio
-      if (row.height < maxHeight) {
-        this.rowImages.push({
-          h: 0,
-          imgs: []
-        })
-      }
+    this.computeRowImages()
+  },
+  watch: {
+    images: function () {
+      console.log('images changed')
+      this.computeRowImages()
     }
-    this.rowImages.forEach((row) => {
-      let marginLeft = 0
-      row.imgs.forEach((img) => {
-        img.displayPositionLeft = marginLeft
-        img.displayHeight = Math.min(row.height, maxHeight)
-        img.displayWidth = (img.displayHeight * img.width / img.height) - paddingX
-        marginLeft += (img.displayWidth + paddingX)
+  },
+  methods: {
+    computeRowImages () {
+      // TODO performance optimize: compute new changed images instead of compute all repeatly
+      this.rowImages = [{
+        h: 0,
+        imgs: []
+      }]
+      const imagesToArrange = [...this.images]
+      const paddingX = 4
+      const rowWidth = this.rowWidth
+      const maxRatio = 5
+      const maxHeight = rowWidth / maxRatio
+      while (imagesToArrange.length > 0) {
+        const img = imagesToArrange.shift()
+        const row = this.rowImages[this.rowImages.length - 1]
+        row.imgs.push(img)
+        let widthHeightRatio = 0
+        row.imgs.forEach((rowImg) => {
+          widthHeightRatio += rowImg.width / rowImg.height
+        })
+        row.height = rowWidth / widthHeightRatio
+        if (row.height < maxHeight) {
+          this.rowImages.push({
+            h: 0,
+            imgs: []
+          })
+        }
+      }
+      this.rowImages.forEach((row) => {
+        let marginLeft = 0
+        row.imgs.forEach((img) => {
+          img.displayPositionLeft = marginLeft
+          if (row.height > maxHeight) {
+            row.height = maxHeight
+          }
+          img.displayHeight = row.height
+          img.displayWidth = (img.displayHeight * img.width / img.height) - paddingX
+          marginLeft += (img.displayWidth + paddingX)
+        })
       })
-    })
+    }
   },
   components: {
     'progressive-image': ProgressiveImage

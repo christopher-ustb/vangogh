@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 1350px">
   <!-- <md-app>
     <md-app-toolbar md-mode="fixed" class="md-primary">
         <h1 class="md-title">Vangogh</h1>
@@ -13,30 +13,24 @@
       <div>专辑</div>
     </md-app-drawer>
     <md-app-content> -->
-      <equal-height-images-row v-if="photos.length" :images="photos" :row-width="1200">
-      </equal-height-images-row>
+      <infi-scroll-images-show-window></infi-scroll-images-show-window>
     <!-- </md-app-content>
   </md-app> -->
   </div>
 </template>
 
 <script>
-import EqualHeightImagesRow from '@/components/EqualHeightImagesRow'
+import InfiScrollImagesShowWindow from '@/components/InfiScrollImagesShowWindow'
 export default {
   name: 'PhotoGallery',
   data () {
     return {
-      photos: [],
-      index: null
     }
   },
   created () {
-    this.$http.get(this.$API_URL_PREFIX + '/api/photos/').then(function (resp) {
-      this.photos = resp.body.results
-    })
   },
   components: {
-    'equal-height-images-row': EqualHeightImagesRow
+    'infi-scroll-images-show-window': InfiScrollImagesShowWindow
   }
 }
 </script>
