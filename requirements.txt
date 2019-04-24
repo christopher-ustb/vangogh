@@ -1,4 +1,3 @@
-face_recognition
 Django==2.1.7
 django-filter
 djangorestframework==3.9.2
@@ -7,3 +6,6 @@ pytz==2018.9
 numpy
 requests
 django-cors-headers
+dlib
+face_recognition
+uwsgi>=2.0,<2.1
