@@ -35,8 +35,9 @@ EXPOSE 8000
 RUN mkdir -p /var/log/vangogh && mkdir -p /var/lib/vangogh/db
 
 VOLUME /var/log/vangogh
+VOLUME /var/lib/vangogh
 
 ENTRYPOINT ["/root/vangogh/docker-entrypoint.sh"]
 
 # Start uWSGI
-CMD ["/venv/bin/uwsgi", "--show-config", "--uid", "root"]
+CMD ["/venv/bin/uwsgi", "--show-config"]
