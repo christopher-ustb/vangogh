@@ -41,3 +41,5 @@ ENTRYPOINT ["/root/vangogh/docker-entrypoint.sh"]
 
 # Start uWSGI
 CMD ["/venv/bin/uwsgi", "--show-config"]
+
+# env VANGOGH_BAIDU_MAP_AK/VANGOGH_BAIDU_MAP_SK

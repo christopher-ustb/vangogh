@@ -104,12 +104,25 @@ class Face(models.Model):
                 face.save()
                 faces.append(face)
 
+        return faces
+
     def _generate_face_image(self):
         photo_path = utils.server_url_to_absolute_path(self.photo.path)
         _, img_ext = os.path.splitext(photo_path)
         img = Image.open(photo_path)
+
+        # extend the crop box a little(1/5 box height/width) to better face view
+        h = self.location_bottom - self.location_top
+        w = self.location_right - self.location_left
+
         # left, upper, right, lower
-        face_crop_box = (self.location_left, self.location_top, self.location_right, self.location_bottom)
+        face_crop_box = (
+            self.location_left - int(w / 4),
+            self.location_top - int(h / 4),
+            self.location_right + int(w / 4),
+            self.location_bottom + int(h / 4)
+        )
+
         img = img.crop(face_crop_box)
         self.image_path = "/.face/%s.person%s%s" % (self.photo.path, self.person.id, img_ext)
         face_image_file_path = utils.server_url_to_absolute_path(self.image_path)

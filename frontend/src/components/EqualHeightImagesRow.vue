@@ -31,12 +31,13 @@ export default {
     'rowWidth': Number
   },
   created () {
-    this.computeRowImages()
   },
   watch: {
-    images: function () {
-      console.log('images changed')
-      this.computeRowImages()
+    images: {
+      immediate: true,
+      handler () {
+        this.computeRowImages()
+      }
     }
   },
   methods: {

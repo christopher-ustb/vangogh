@@ -141,7 +141,7 @@ REST_FRAMEWORK = {
 
 PHOTO_SCAN_INTERVAL = 600
 
-BAIDU_MAP_AK = "WNkguP1ELumSEyecEEjPvZovgebfg2s9"
-BAIDU_MAP_SK = os.environ.get("BAIDU_MAP_SK")
+BAIDU_MAP_AK = os.environ["VANGOGH_BAIDU_MAP_AK"]
+BAIDU_MAP_SK = os.environ["VANGOGH_BAIDU_MAP_SK"]
 
 LOGGER_FILE = "/var/log/vangogh/vangogh.log"
