@@ -27,6 +27,7 @@ routers = routers.DefaultRouter()
 routers.register(r'api/photos', photo_views.PhotoViewSet)
 routers.register(r'api/people', person_views.PersonViewSet)
 routers.register(r'api/faces', person_views.FaceViewSet)
+routers.register(r'api/people/(?P<person_id>\d+)/faces', person_views.PersonFaceViewSet, basename='face')
 routers.register(r'api/albums', album_views.AlbumViewSet)
 routers.register(r'api/albums/(?P<album_id>\d+)/photos', photo_views.AlbumPhotoViewSet, basename='photo')
 

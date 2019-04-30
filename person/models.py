@@ -124,7 +124,7 @@ class Face(models.Model):
         )
 
         img = img.crop(face_crop_box)
-        self.image_path = "/.face/%s.person%s%s" % (self.photo.path, self.person.id, img_ext)
+        self.image_path = "/.face%s.person%s%s" % (self.photo.path, self.person.id, img_ext)
         face_image_file_path = utils.server_url_to_absolute_path(self.image_path)
         os.makedirs(os.path.dirname(face_image_file_path), exist_ok=True)
         img.save(face_image_file_path)
