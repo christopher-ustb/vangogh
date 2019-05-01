@@ -7,6 +7,7 @@ import router from './router'
 import VueMaterial from 'vue-material'
 import 'normalize.css'
 import 'vue-material/dist/vue-material.min.css'
+import 'material-icons/iconfont/material-icons.css'
 
 Vue.config.productionTip = false
 Vue.prototype.$API_URL_PREFIX = process.env.API_URL_PREFIX

@@ -1,22 +1,46 @@
 <template>
-  <div style="width: 1350px">
-  <!-- <md-app>
+  <md-app>
     <md-app-toolbar md-mode="fixed" class="md-primary">
         <h1 class="md-title">Vangogh</h1>
-        <md-input placeholder="search"></md-input>
-        <md-button>上传</md-button>
     </md-app-toolbar>
     <md-app-drawer md-persistent="mini">
-      <div>照片</div>
-      <div>人物</div>
-      <div>地点</div>
-      <div>专辑</div>
+      <div class="menu-item-box">
+        <router-link to="/">
+          <a>
+            <md-icon>photo</md-icon>
+            <div>照片</div>
+          </a>
+        </router-link>
+      </div>
+      <div class="menu-item-box">
+        <router-link to="/people">
+          <a>
+            <md-icon>people</md-icon>
+            <div>人物</div>
+          </a>
+        </router-link>
+      </div>
+      <div class="menu-item-box">
+        <router-link to="/places">
+          <a>
+            <md-icon>place</md-icon>
+            <div>地点</div>
+          </a>
+        </router-link>
+      </div>
+      <div class="menu-item-box">
+        <router-link to="/albums">
+          <a>
+            <md-icon>photo_album</md-icon>
+            <div>专辑</div>
+          </a>
+        </router-link>
+      </div>
     </md-app-drawer>
-    <md-app-content> -->
+    <md-app-content>
       <infi-scroll-images-show-window></infi-scroll-images-show-window>
-    <!-- </md-app-content>
-  </md-app> -->
-  </div>
+    </md-app-content>
+  </md-app>
 </template>
 
 <script>
@@ -37,12 +61,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.image {
-    float: left;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    border: 1px solid #ebebeb;
-    margin: 5px;
-  }
+.menu-item-box {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 </style>

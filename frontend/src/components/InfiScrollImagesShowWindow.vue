@@ -21,7 +21,7 @@ export default {
     this.pageYOffset = 0
   },
   mounted () {
-    this.containerWidth = this.$refs.showWindow.offsetWidth
+    this.containerWidth = this.$refs.showWindow.clientWidth
   },
   methods: {
     handleScroll () {

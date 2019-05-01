@@ -49,7 +49,7 @@ export default {
       }]
       const imagesToArrange = [...this.images]
       const paddingX = 4
-      const rowWidth = this.rowWidth
+      const rowWidth = this.rowWidth - 100
       const maxRatio = 5
       const maxHeight = rowWidth / maxRatio
       while (imagesToArrange.length > 0) {

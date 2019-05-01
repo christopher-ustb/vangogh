@@ -16,6 +16,16 @@ export default new Router({
       path: '/people',
       name: 'PeopleList',
       component: PeopleList
+    },
+    {
+      path: '/places',
+      name: 'PeopleList',
+      component: PeopleList
+    },
+    {
+      path: '/albums',
+      name: 'PeopleList',
+      component: PeopleList
     }
   ]
 })
