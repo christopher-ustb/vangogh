@@ -6,7 +6,8 @@ import VueResource from 'vue-resource'
 import router from './router'
 import VueMaterial from 'vue-material'
 import 'normalize.css'
-import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/vue-material.css'
+import 'vue-material/dist/theme/default.css'
 import 'material-icons/iconfont/material-icons.css'
 
 Vue.config.productionTip = false

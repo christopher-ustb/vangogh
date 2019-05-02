@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import TestDraft from '@/components/TestDraft'
 import AllPhoto from '@/views/AllPhoto'
+import PersonPhotos from '@/views/PersonPhotos'
 import PeopleList from '@/components/PeopleList'
 import BasicLayout from '@/layouts/BasicLayout'
 
@@ -23,6 +25,11 @@ export default new Router({
           component: PeopleList
         },
         {
+          path: 'person/:id',
+          name: 'PersonPhotos',
+          component: PersonPhotos
+        },
+        {
           path: 'places',
           name: 'PlaceList',
           component: PeopleList
@@ -33,6 +40,10 @@ export default new Router({
           component: PeopleList
         }
       ]
+    },
+    {
+      path: '/test',
+      component: TestDraft
     }
   ]
 })
