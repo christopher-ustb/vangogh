@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import TestDraft from '@/components/TestDraft'
 import AllPhoto from '@/views/AllPhoto'
 import PersonPhotos from '@/views/PersonPhotos'
-import PeopleList from '@/components/PeopleList'
+import PeopleList from '@/views/PeopleList'
 import BasicLayout from '@/layouts/BasicLayout'
 
 Vue.use(Router)

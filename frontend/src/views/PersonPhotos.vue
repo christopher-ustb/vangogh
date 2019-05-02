@@ -2,7 +2,7 @@
   <div>
     <div>
       <md-avatar>
-        <img :src="$STATIC_URL_PREFIX + person.url" alt="Avatar">
+        <img v-if="person.coverFace" :src="$STATIC_URL_PREFIX + person.coverFace.image_path" alt="Avatar">
       </md-avatar>
       <!-- <span>{{ person.name }}</span> -->
       <md-field>
@@ -27,10 +27,22 @@ export default {
     }
   },
   created () {
-    this.$http.get(this.$API_URL_PREFIX + '/api/people/' + this.$route.params.id).then(function (resp) {
+    this.$http.get(
+      this.$API_URL_PREFIX + '/api/people/' + this.$route.params.id + '/'
+    ).then(function (resp) {
       if (resp.ok) {
-        this.person = resp.body
+        const p = resp.body
+        p.coverFace = null
+        this.person = p
       }
+    }).then(function () {
+      if (this.person.cover_face_id) {
+        return this.$http.get(
+          this.$API_URL_PREFIX + '/api/faces/' + this.person.cover_face_id + '/'
+        )
+      }
+    }).then(function (faceResp) {
+      this.person.coverFace = faceResp.body
     })
   },
   methods: {

@@ -12,8 +12,10 @@ from vangogh.utils import logger
 
 
 class Person(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128, blank=False)
     mean_face_encoding = models.TextField()
+    cover_face_id = models.IntegerField(null=True, blank=True)
     face_count = models.IntegerField(default=1)
     gmt_created = models.DateTimeField(default=timezone.now, blank=True)
 
@@ -51,6 +53,7 @@ class Person(models.Model):
 
 
 class Face(models.Model):
+    id = models.AutoField(primary_key=True)
     photo = models.ForeignKey(Photo, related_name='faces', on_delete=False, blank=False, null=True)
     person = models.ForeignKey(Person, on_delete=False, related_name='faces', blank=True, null=True)
     image_path = models.CharField(max_length=256)
@@ -102,6 +105,11 @@ class Face(models.Model):
 
                 face._generate_face_image()
                 face.save()
+
+                if len(same_people) == 0:
+                    face.person.cover_face_id=face.id
+                    face.person.save()
+
                 faces.append(face)
 
         return faces
